@@ -24,8 +24,6 @@ void main()
 	Mat srcImage = imread("Cube.jpg");
 	imshow("[1]Cube", srcImage);
 
-
-
 	waitKey(0);
 	destroyAllWindows();
 }
