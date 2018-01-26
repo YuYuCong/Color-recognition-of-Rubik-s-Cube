@@ -148,11 +148,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SolveCube.cpp" />
+    <ClCompile Include="get_Colour.cpp" />
+    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SerialPort.cpp" />
+    <ClCompile Include="check_value.cpp" />
     <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\main.cpp" />
+    <ClCompile Include="源.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\function_declare.h" />
     <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\include_all.h" />
+    <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SerialPort.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\Color recognition of Rubik%27s Cube\readme.txt" />

@@ -1,8 +1,8 @@
 //*=====================================================================================
-//*                         --main.c--
-//*	            Copyleft! 2017 William Yu
+//*                          main.c--
+//*	             Copyleft! 2018 William Yu
 //*          Some rights reserved：CC(creativecommons.org)BY-NC-SA
-//*              Copyleft! 2017 William Yu
+//*              Copyleft! 2018 William Yu
 //*      版权部分所有，遵循CC(creativecommons.org)BY-NC-SA协议授权方式使用
 //*
 //* Filename                : main.c
@@ -18,12 +18,13 @@
 /**
 * @function main
 */
-
 void main()
 {
 	Mat srcImage = imread("Cube.jpg");
-	imshow("[1]Cube", srcImage);
+	check_value(srcImage);
+	//get_colour(srcImage);
 
 	waitKey(0);
 	destroyAllWindows();
 }
+

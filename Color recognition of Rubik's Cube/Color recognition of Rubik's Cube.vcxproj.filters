@@ -18,12 +18,30 @@
     <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="check_value.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SerialPort.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="源.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="get_Colour.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SolveCube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\function_declare.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\include_all.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SerialPort.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
