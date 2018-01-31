@@ -5,7 +5,7 @@
 */
 int check_value(Mat & srcImage)
 {
-	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
+	namedWindow("Control", WINDOW_NORMAL); //create a window called "Control"
 	int iLowH = 100;
 	int iHighH = 140;
 	int iLowS = 90;
@@ -33,17 +33,16 @@ int check_value(Mat & srcImage)
 		Mat imgThresholded;
 		inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
 
-		//开操作 (去除一些噪点)
+		//开操作 (去噪点)
 		Mat element = getStructuringElement(MORPH_RECT, Size(5, 5));
 		morphologyEx(imgThresholded, imgThresholded, MORPH_OPEN, element);
-
-		//闭操作 (连接一些连通域)
+		//闭操作 (连接连通域)
 		morphologyEx(imgThresholded, imgThresholded, MORPH_CLOSE, element);
 
-		namedWindow("[1]Cube", CV_WINDOW_AUTOSIZE);
+		namedWindow("[1]Cube", WINDOW_NORMAL);
 		imshow("[1]Cube", srcImage);
 
-		namedWindow("[2]Thresholded_Image", CV_WINDOW_AUTOSIZE);
+		namedWindow("[2]Thresholded_Image", WINDOW_NORMAL);
 		imshow("[2]Thresholded_Image", imgThresholded);
 
 

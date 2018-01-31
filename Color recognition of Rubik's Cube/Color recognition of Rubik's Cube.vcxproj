@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SolveCube.cpp" />
-    <ClCompile Include="get_Colour.cpp" />
+    <ClCompile Include="get_Color.cpp" />
     <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SerialPort.cpp" />
     <ClCompile Include="check_value.cpp" />
     <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\main.cpp" />

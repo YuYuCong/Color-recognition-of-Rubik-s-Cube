@@ -27,10 +27,10 @@
     <ClCompile Include="源.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="get_Colour.cpp">
+    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SolveCube.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\SolveCube.cpp">
+    <ClCompile Include="get_Color.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

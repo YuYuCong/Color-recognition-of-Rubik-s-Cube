@@ -1,9 +1,6 @@
-﻿  源.cpp
-  main.cpp
-  check_value.cpp
-  SerialPort.cpp
-  get_Colour.cpp
+﻿  main.cpp
   SolveCube.cpp
+f:\0.visualstudio_about\0.opencv\0.code_test\21.color recognition\color recognition of rubik's cube\color recognition of rubik's cube\solvecube.cpp(157): warning C4244: “=”: 从“__int64”转换到“int”，可能丢失数据
   正在生成代码...
   Color recognition of Rubik's Cube.vcxproj -> F:\0.VisualStudio_about\0.OpenCV\0.code_test\21.Color recognition\Color recognition of Rubik's Cube\x64\Debug\Color recognition of Rubik's Cube.exe
   Color recognition of Rubik's Cube.vcxproj -> F:\0.VisualStudio_about\0.OpenCV\0.code_test\21.Color recognition\Color recognition of Rubik's Cube\x64\Debug\Color recognition of Rubik's Cube.pdb (Partial PDB)
