@@ -3,9 +3,27 @@
 
 #include "include_all.h"
 
-/// Global Variables 
-//char g_acSolvedState[49] = "UFURUBULDFDRDBDLFRFLBRBLUFRURBUBLULFDRFDFLDLBDBR"; // State of a solved cube
-//const char Faces[7] = "FRBLUD";
+/// Function headers 
+/* 采集魔方颜色，修改参数 */
+//#define check_color_value
+#ifdef check_color_value
+int check_value(Mat& srcImage);
+#endif
+/* 鉴别魔方颜色 */
+void get_color(Mat& srcImage, int color_this_face[9]);
+/**/
+void deviation(int Start_color[54]);
+/**/
+void standardize_color(const int Start_color[54], char Start_cube[20][4]);
+/* 解魔方 */
+int mySolveCube(char start_cube[20][4]);
+
+/// Global Variables
+extern string colorlet;
+extern string facelet;              //position->|  U  |  R    |   F    |   D    |   L    |   B    |
+extern int Start_color[54];         //          |0-4-8|9-13-17|18-22-26|27-31-35|36-40-44|45-49-53|
+extern int color_this_face[9];      //          |0-4-9|0 -4- 9|0 -4-  9|0 -4-  9|0 -4-  9|0 -4-  9|	
+extern char Start_cube[20][4];
 
 ///白红绿蓝橙黄-->白x绿y红z
 //WHITE
@@ -52,14 +70,6 @@ const int Y_LowV = 0;
 const int Y_HighV = 255;
 
 
-/// Function headers 
-
-/* 采集魔方颜色，修改参数 */
-int check_value(Mat & srcImage);
-/* 鉴别魔方颜色 */
-int* get_color(Mat & srcImage);
-/* 解魔方 */
-int mySolveCube(char start_cube[][4], int lin);
 
 #endif // !FUNCTION_DECLARE_H
 

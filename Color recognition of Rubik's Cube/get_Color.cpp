@@ -17,7 +17,7 @@ Mat getROI(Mat image, Rect rect)
 }
 
 
-int Sums(Mat src)
+int Sums(Mat& src)
 {
 	int counter = 0;
 	//迭代器访问像素点  
@@ -31,11 +31,20 @@ int Sums(Mat src)
 	return counter;
 }
 
-
+/*********************************************************************
+* @return: color_this_face[9]
+*
+*		    position->|0 |1 |2 |
+*					  |3 |4 |5 |
+*                     |6 |7 |8 |
+*           meaning-> 0 1 2 3 4 5
+*                     W R G B O Y     (Actually,it doesn`t matter.)
+*             	
+************************************************************************/
 /**
 * @function get_color
 */
-int* get_color(Mat & srcImage)
+void get_color(Mat& srcImage, int color_this_face[9])
 {
 	Mat imgHSV;
 	vector<Mat> hsvSplit;
@@ -66,6 +75,14 @@ int* get_color(Mat & srcImage)
 	////闭操作 (连接连通域)
 	//morphologyEx(imgThresholded, imgThresholded, MORPH_CLOSE, element);
 
+	vector<Mat> color_thre;
+	color_thre.push_back(W_Thresholded);
+	color_thre.push_back(R_Thresholded);
+	color_thre.push_back(G_Thresholded);
+	color_thre.push_back(B_Thresholded);
+	color_thre.push_back(O_Thresholded);
+	color_thre.push_back(Y_Thresholded);
+
 	///show me the result
 	namedWindow("[1]Cube", WINDOW_NORMAL);
 	imshow("[1]Cube", srcImage);
@@ -83,82 +100,30 @@ int* get_color(Mat & srcImage)
 	imshow("[7]Y_Thresholded", Y_Thresholded);
 
 	///提取感兴趣区域，9块，并判断黑白
+	//----------------------------------------
+	//TODO:这几个参数视图片大小来调整,与摄像头安装距离有关
+	//----------------------------------------
 	int width = 50;
 	int x = 20;//x轴水平
 	int y = 20;
+	int thresholded = 200; 
 
-	int* color_this_face = new int [9];//此面数据
-	for (int i = 0; i < 3; i++)
+	for (int colour = 0; colour < 6; colour++)
 	{
-		for (int j = 0; j < 3; j++)
+		for (int i = 0; i < 3; i++)
 		{
-			Mat roi = getROI(W_Thresholded, Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
-			int a = Sums(roi);//调用函数Sums  
-			cout << "A:" << a;
-			int thresholded = 200; //这个参数视图片大小来调整
-			if (a > thresholded) color_this_face[3 * i + j] = 0;
+			for (int j = 0; j < 3; j++)
+			{
+				Mat roi = getROI(color_thre[colour], Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
+				int isColor = Sums(roi);//调用函数Sums  
+				cout<<"This face"<<" "<<colorlet[colour]<<" "<<"thresholded cubie NO."<< 3 * i + j << " " << isColor << endl;
+				if (isColor > thresholded)
+					color_this_face[3 * i + j] = colour;
+			}
 		}
 	}
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			Mat roi = getROI(R_Thresholded, Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
-			int a = Sums(roi);//调用函数Sums  
-			cout << "A:" << a;
-			int thresholded = 200; //这个参数视图片大小来调整
-			if (a > thresholded) color_this_face[3 * i + j] = 1;
-		}
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			Mat roi = getROI(G_Thresholded, Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
-			int a = Sums(roi);//调用函数Sums  
-			cout << "A:" << a;
-			int thresholded = 200; //这个参数视图片大小来调整
-			if (a > thresholded) color_this_face[3 * i + j] = 2;
-		}
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			Mat roi = getROI(B_Thresholded, Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
-			int a = Sums(roi);//调用函数Sums  
-			cout << "A:" << a;
-			int thresholded = 200; //这个参数视图片大小来调整
-			if (a > thresholded) color_this_face[3 * i + j] = 3;
-		}
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			Mat roi = getROI(O_Thresholded, Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
-			int a = Sums(roi);//调用函数Sums  
-			cout << "A:" << a;
-			int thresholded = 200; //这个参数视图片大小来调整
-			if (a > thresholded) color_this_face[3 * i + j] = 4;
-		}
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < 3; j++)
-		{
-			Mat roi = getROI(Y_Thresholded, Rect((j + 1)*x, (i + 1)*y, 50, 50));//对一种颜色的二值图提取感兴趣区域
-			int a = Sums(roi);//调用函数Sums  
-			cout << "A:" << a;
-			int thresholded = 200; //这个参数视图片大小来调整
-			if (a > thresholded) color_this_face[3 * i + j] = 5;
-		}
-	}
-
-
-
+	
 	waitKey(0);
 	destroyAllWindows();
 
-	return color_this_face;
 }

@@ -33,6 +33,9 @@
     <ClCompile Include="get_Color.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\Color2cube.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Color recognition of Rubik%27s Cube\Color recognition of Rubik%27s Cube\function_declare.h">

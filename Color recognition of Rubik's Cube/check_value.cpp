@@ -3,7 +3,7 @@
 /**
 * @function check_value
 */
-int check_value(Mat & srcImage)
+int check_value(Mat& srcImage)
 {
 	namedWindow("Control", WINDOW_NORMAL); //create a window called "Control"
 	int iLowH = 100;
@@ -41,10 +41,10 @@ int check_value(Mat & srcImage)
 
 		namedWindow("[1]Cube", WINDOW_NORMAL);
 		imshow("[1]Cube", srcImage);
-
+		moveWindow("[1]Cube", 20, 20);
 		namedWindow("[2]Thresholded_Image", WINDOW_NORMAL);
 		imshow("[2]Thresholded_Image", imgThresholded);
-
+		moveWindow("[2]Thresholded_Image", 120, 120);
 
 		char key = (char)waitKey(300);
 		if (key == 27)

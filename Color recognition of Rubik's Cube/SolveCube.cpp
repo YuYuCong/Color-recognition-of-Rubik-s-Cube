@@ -127,16 +127,19 @@ vi id(vi state) {
 	return state;
 }
 
+
+
+
+
 //----------------------------------------------------------------------
 ///这是我改动的！！！
-int main(int argc, char** argv) {
-//int mySolveCube(char start_cube[][4], int lin ){
+//int main(int argc, char** argv) {
+int mySolveCube(char Start_cube[20][4]){
 	
 	///这是我添加的！！！
-	char start_cube[20][4] = { "UR","UB","UL","UF","DF","DR","DB","DL","FR","FL","BR","BL",
-		"URB","UBL","ULF","UFR","DRF","DFL","DLB","DBR" };
-	///预留char start_cube[20][4]为输入端口
-
+	//char Start_cube[20][4] = { "UR","UB","UL","UF","DF","DR","DB","DL","FR","FL","BR","BL",
+	//	"URB","UBL","ULF","UFR","DRF","DFL","DLB","DBR" };
+	///预留char Start_cube[20][4]为输入端口
 
 	//--- Define the goal.
 	string goal[] = { "UF", "UR", "UB", "UL", "DF", "DR", "DB", "DL", "FR", "FL", "BR", "BL",
@@ -152,7 +155,7 @@ int main(int argc, char** argv) {
 		//--- Current (start) state.
 		///这是我改动的！！！
 		//string cubie = argv[i+1];
-		string cubie = start_cube[i];
+		string cubie = Start_cube[i];
 
 		while ((currentState[i] = find(goal, goal + 20, cubie) - goal) == 20) {
 			cubie = cubie.substr(1) + cubie[0];
@@ -242,4 +245,5 @@ int main(int argc, char** argv) {
 		;
 	}
 	system("pause");
+	return 0;
 }
