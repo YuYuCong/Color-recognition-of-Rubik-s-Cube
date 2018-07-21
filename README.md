@@ -40,19 +40,19 @@ check_value函数：魔方颜色hsv参数检测
 
 ```c++
 get_color.cpp：
-			摄像头读取依次读取6面颜色，每获得一张图片，通知下位机转动魔方，将54色存入数组
-		    position->|0 |1 |2 |
- 					  |3 |4 |5 |
-                      |6 |7 |8 |
-          	meaning-> 0 1 2 3 4 5
-                      W R G B O Y 
+		摄像头读取依次读取6面颜色，每获得一张图片，通知下位机转动魔方，将54色存入数组
+		position->|0 |1 |2 |
+		          |3 |4 |5 |
+		          |6 |7 |8 |
+		meaning-> 0 1 2 3 4 5
+		          W R G B O Y 
 deviation.cpp：检查魔方54面颜色是否齐全，查错
 standardize_color.cpp：将数组转化为标准魔方描述顺序
 mySolveCube.cpp：将魔方状态投入魔方还原函数，输入魔方还原步骤
 move函数.cpp：解读还原描述，转化为机械步骤，发送给下位机
 ```
 
-###Cubielet
+### Cubielet
 
 The names of the cubielet positions of the cube.
 
@@ -210,7 +210,7 @@ Color:
 
 ![cube.jpg](https://github.com/YuYuCong/YuYuCong.github.io/blob/master/img/cube.jpg?raw=true)
 
-##See Also
+## See Also
 
 - <http://tomas.rokicki.com/cubecontest/winners.html>
 - <http://williamyu.top/blog/2018/02/05/solve-cube/>
