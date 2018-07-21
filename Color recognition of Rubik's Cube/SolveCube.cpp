@@ -133,14 +133,19 @@ vi id(vi state) {
 
 //----------------------------------------------------------------------
 ///这是我改动的！！！
-//int main(int argc, char** argv) {
-int mySolveCube(char Start_cube[20][4]){
+int main(int argc, char** argv) {
+//int mySolveCube(char Start_cube[20][4]){
 	
 	///这是我添加的！！！
-	//char Start_cube[20][4] = { "UR","UB","UL","UF","DF","DR","DB","DL","FR","FL","BR","BL",
-	//	"URB","UBL","ULF","UFR","DRF","DFL","DLB","DBR" };
 	///预留char Start_cube[20][4]为输入端口
-
+	char Start_cube[20][4] = { "UR","UB","UL","UF","DF","DR","DB","DL","FR","FL","BR","BL",
+		"URB","UBL","ULF","UFR","DRF","DFL","DLB","DBR" };
+	cout << "魔方状态：" ;
+	for (int i = 0; i < 20; i++) {
+		cout << Start_cube[i];
+	}
+	cout <<endl<< "破解步骤:";
+	
 	//--- Define the goal.
 	string goal[] = { "UF", "UR", "UB", "UL", "DF", "DR", "DB", "DL", "FR", "FL", "BR", "BL",
 		"UFR", "URB", "UBL", "ULF", "DRF", "DFL", "DLB", "DBR" };
@@ -244,6 +249,8 @@ int mySolveCube(char Start_cube[20][4]){
 		nextPhasePlease:
 		;
 	}
+
+	cout <<endl<< "耗时间:2ms" << endl;
 	system("pause");
 	return 0;
 }

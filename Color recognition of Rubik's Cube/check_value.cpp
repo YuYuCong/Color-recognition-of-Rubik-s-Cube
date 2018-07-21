@@ -44,7 +44,7 @@ int check_value(Mat& srcImage)
 		moveWindow("[1]Cube", 20, 20);
 		namedWindow("[2]Thresholded_Image", WINDOW_NORMAL);
 		imshow("[2]Thresholded_Image", imgThresholded);
-		moveWindow("[2]Thresholded_Image", 120, 120);
+		moveWindow("[2]Thresholded_Image", 300, 20);
 
 		char key = (char)waitKey(300);
 		if (key == 27)

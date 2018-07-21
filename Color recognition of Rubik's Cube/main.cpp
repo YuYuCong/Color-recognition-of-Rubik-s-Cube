@@ -34,53 +34,55 @@ char Start_cube[20][4];
 /**
 * @function main
 */
-int main(int argc, const char** argv)
-{
-	VideoCapture cap;
-	Mat srcImage;
 
-	#ifdef check_color_value
-		cap.open(0);
-		if (!cap.isOpened())
-		{
-			cout << "Can`t open camera\n";
-		}
-		cap >> srcImage;
-		cap.release();
-		if (srcImage.empty())
-			return -1;
-		check_value(srcImage);
-		return -1;
-	#endif // !check_color_value
-
-	
-	for(int face = 0; face<6; face++)
-	{
-		cout << "Please show me the face" << " " << facelet[face] << endl;
-		//（填空：串口发送下位机转动命令
-		//（填空：串口回传ok
-		cap.open(0);
-		if (!cap.isOpened()) { cout << "Can`t open camera\n"; return -1; }
-		cap >> srcImage;
-		cap.release();
-		if (srcImage.empty()) return -1;
-		get_color(srcImage, color_this_face);
-		for (int i = 0; i < 9; i++)
-		{
-			Start_color[i + 9 * face] = color_this_face[i];
-		}
-	}
-
-	cout << "Please go back to the start position and I`m going to solve it." << endl;
-	//（填空：串口发送下位机转动命令
-	//（填空：串口回传ok
-
-	deviation(Start_color);
-	standardize_color(Start_color, Start_cube);
-	mySolveCube(Start_cube);
-	//move();
-	
-	return 0;
-
-}
+//int main(int argc, const char** argv)
+//{
+//	VideoCapture cap;
+//	Mat srcImage;
+//
+//	#ifdef check_color_value
+//		cap.open(0);
+//		if (!cap.isOpened())
+//		{
+//			cout << "Can`t open camera\n";
+//		}
+//		cap >> srcImage;
+//		cap.release();
+//		if (srcImage.empty())
+//			return -1;
+//		srcImage=imread("Cube.jpg");
+//		check_value(srcImage);
+//		return -1;
+//	#endif // !check_color_value
+//
+//	
+//	for(int face = 0; face<6; face++)
+//	{
+//		cout << "Please show me the face" << " " << facelet[face] << endl;
+//		//--TODO：串口发送下位机转动命令
+//		//--TODO：串口回传ok
+//		cap.open(0);
+//		if (!cap.isOpened()) { cout << "Can`t open camera\n"; return -1; }
+//		cap >> srcImage;
+//		cap.release();
+//		if (srcImage.empty()) return -1;
+//		get_color(srcImage, color_this_face);
+//		for (int i = 0; i < 9; i++)
+//		{
+//			Start_color[i + 9 * face] = color_this_face[i];
+//		}
+//	}
+//
+//	cout << "Please go back to the start position and I`m going to solve it." << endl;
+//	//--TODO：串口发送下位机转动命令
+//	//--TODO：串口回传ok
+//
+//	deviation(Start_color);
+//	standardize_color(Start_color, Start_cube);
+//	mySolveCube(Start_cube);
+//	//move();
+//	
+//	return 0;
+//
+//}
 
