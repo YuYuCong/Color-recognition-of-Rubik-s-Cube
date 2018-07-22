@@ -214,6 +214,7 @@ Color:
 
 - <http://tomas.rokicki.com/cubecontest/winners.html>
 - <http://williamyu.top/blog/2018/02/05/solve-cube/>
+- <http://www.zunny.com/RUBIK.HTM>
 
 ## Contributing / Contact
 
