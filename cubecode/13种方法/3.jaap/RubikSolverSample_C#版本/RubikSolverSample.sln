@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RubikSolverSample", "RubikSolverSample\RubikSolverSample.csproj", "{CDD3190B-C41A-4B90-9923-7E87103FBD98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CDD3190B-C41A-4B90-9923-7E87103FBD98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD3190B-C41A-4B90-9923-7E87103FBD98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD3190B-C41A-4B90-9923-7E87103FBD98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD3190B-C41A-4B90-9923-7E87103FBD98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7F6BA54A-6F2F-4677-99F1-AB888DECF431}
+	EndGlobalSection
+EndGlobal

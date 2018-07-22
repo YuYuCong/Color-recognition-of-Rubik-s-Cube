@@ -1,0 +1,25 @@
+Compilation:
+
+g++ -O3 -o cube cube.cc
+
+Run:
+
+./cube
+
+My name: Joe Lindström (Lindstroem, or Lindstr&ouml;m in HTML i think,
+	                      o with two dots over it anyway)
+
+My email: joeli289@student.liu.se
+
+Country: Sweden
+
+City: Linköping (Linkoeping, or Link&ouml;ping in HTML i think)
+
+Description:
+
+This one is about one third faster on my computer so i thought i'd submit
+just in case :-)
+
+I use an ugly hack based on IDA*. The search is chopped up into 12 steps
+where each step is done with an IDA* search. I also do a BFS backwards from 
+the solved cube with depth 10 using only sides D and B.

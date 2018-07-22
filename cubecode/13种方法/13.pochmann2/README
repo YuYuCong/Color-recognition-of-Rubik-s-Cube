@@ -1,0 +1,122 @@
+----------------------------------------------------------------------
+Author Info
+----------------------------------------------------------------------
+
+Name:		Stefan Pochmann
+Email:		pochmann@gmx.de
+City:		Darmstadt
+Country:	Germany
+
+
+----------------------------------------------------------------------
+Description
+----------------------------------------------------------------------
+
+Similar to blindfolded cubing, I apply sequences that only alter the state
+of the cube very little. The major benefit of this is that I don't even
+really simulate the cube, but only simulate what a whole algorithm does.
+It also makes the whole program a lot easier, I don't even feel the need
+to have some cool data structure to represent the cube. I just work on
+the array of command line parameters.
+
+First all cubies are oriented, then all cubies are permuted. Both steps
+actually work on edges first and then on the corners, but in order to get
+a short program I mixed the codes for the originally four steps to get the
+two major steps I have now.
+
+
+Orienting
+---------
+
+The cubies are oriented one after the other. For the edges, I use the
+algorithm (F R F' R2 F2 R L D R' D' L' F2 R) which flips the UF and DR
+edges. I always flip some edge together with the UF edge, so for example
+if I want to flip the DL edge I do (B2 D') before the algorithm to bring
+it to DR and the inverse (D B2) after the algorithm to bring it back.
+
+The corners are treated almost the same way. The only difference is
+that each algorithm might be applied twice because I only implemented
+one direction. Here's the algorithm that twists the ULF and the DBR
+corners: (F' D2 F R' U2 R F' D2 F R' U2 R).
+
+
+Permuting
+---------
+
+The cubies are permuted one after the other. Consider edges only.
+I use the UF position as a buffer, i.e. if it contains a cubie
+that has to go to position X then I swap it there, getting the
+cubie from position X to position UF. All edges reach their correct
+positions by going through UF. If UF is correct but others aren't,
+then I get a wrong one to UF and go on.
+
+Since it's impossible to just swap two edges, I also swap two corners.
+Here's the algorithm that swaps UF with DR and UFR with ULF:
+(F2 L2 B D B' L2 F U' F U).
+
+When all edges are correct I solve the corners simply the same way
+but using the algorithm (B2 R2 D' R' D R' B2 L U' L').
+
+
+Algorithms
+----------
+
+Where are all the algorithms? Well, the four basic algorithms are
+encoded as (ILOFCLKHRNQCL,OBIRALOBIRAL,CEJHPEIMIG,DFNRHRDKMQ) which
+you can easily find in the code. The very long string contains all
+the "pre-algorithm" algorithms that bring a cubie to the position
+where it will be handled by one of the four basic algorithms. The
+corresponding "post-algorithms" are computed by inversing the pre-
+algorithms.
+
+
+----------------------------------------------------------------------
+Etc
+----------------------------------------------------------------------
+
+I know this program has been beaten with much lower scores, however I
+still hope it will be the only program fitting so nicely on a single
+screen. And maybe it could be even a bit shorter using Python which
+I unfortunately don't know enough to try.
+
+This approach also shows that stiff_hands's comment about the required
+number of algorithms for blindfolded solving can be strengthened.
+Four algorithms are plenty enough. Actually three are enough as well,
+because you could use the same algorithm for permuting corners and
+edges. I just used two different because it makes the pre-algs shorter.
+No, that's a damn lie. The real reason is that I only realized this
+moments ago ;-). Here's stiff_hands's blindsolving description:
+http://homepage.ntlworld.com/family.hayden/cube/blindfold_frontpage.html
+
+Thanks to Mike Reid, I computed the four basic algs with his solver.
+It's very easy to use, especially if you just want to find algorithms
+for very small changes. I had tried Kociemba's excellent Cube Explorer
+first, but using the graphical face editor was a little awkward for me
+(make a little mistake and it will try to "fix" it, doing something you
+don't really want ;-). But that's just me, and I like Cube Explorer
+anyway. So, thanks to Herbert Kociemba as well.
+
+Also a big thank you to Tomas Rokicki for running this contest. A while
+ago he had asked me about very short cube solving programs and I had an
+idea I but failed to tell him. Now of course I think this was good,
+otherwise this contest may have not been created at all (?). However,
+the program I submitted now is not what I had had in mind back then.
+It's a far more advanced solution, derived from my original approach
+by making several major steps:
+
+- Using single swaps. Originally I wanted to cycle all remaining edges
+  until the current one is correct, e.g. after correctly placing the
+  first two edges cycle the remaining 10 until the third is correct.
+  This needs many different algorithms and would exceed the solution
+  length limit of 1000 moves which is why I searched for a better
+  solution.
+
+- Don't use a real simulator. This idea followed the above idea because
+  I realized that only very few pieces would change.
+
+- Use only four basic algorithms and build others with pre/post-algs.
+
+- Compute the post-algs instead of writing them down explicitly.
+
+Without this contest, I don't think I would've thought of any of these
+improvements, so I'm very happy that Tom ran it.

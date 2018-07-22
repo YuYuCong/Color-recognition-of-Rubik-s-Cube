@@ -1,0 +1,4280 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[    182395,       4271]
+NotebookOptionsPosition[    177898,       4116]
+NotebookOutlinePosition[    178244,       4131]
+CellTagsIndexPosition[    178201,       4128]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["The TwoPhase Package", "Title",
+ CellChangeTimes->{{3.4967796225818915`*^9, 3.4967796421160088`*^9}, {
+  3.4967797497201633`*^9, 3.496779768799255*^9}},
+ TextAlignment->Center,
+ Background->RGBColor[0.87, 0.94, 1]],
+
+Cell["Herbert Kociemba;  November 2010", "Subtitle",
+ CellChangeTimes->{{3.4967800797380395`*^9, 3.4967801201063485`*^9}, {
+  3.49796082518709*^9, 3.4979608276312294`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Description", "Section",
+ CellChangeTimes->{{3.4967802454925203`*^9, 3.4967802584802628`*^9}},
+ Background->RGBColor[0.87, 0.94, 1]],
+
+Cell[TextData[{
+ StyleBox["The TwoPhase package is a pure ",
+  FontSize->16],
+ StyleBox["Mathematica",
+  FontSize->16,
+  FontSlant->"Italic"],
+ StyleBox[" implementation of the Two-Phase-Algorithm for solving Rubiks \
+cube. It implements the algorithm in the simplest possible way. The speed of \
+this implementation is not comparable with the speed implemented in my Cube \
+Explorer program. On the other hand the source code ",
+  FontSize->16],
+ StyleBox["TwoPhase.m",
+  FontSize->16,
+  FontSlant->"Italic"],
+ StyleBox["  is quite short and you are invited to read it. I tried my best \
+to give it a reasonable documented form. \n\nThere are also some other \
+functions to display and multiply cubes, generate random cubes and to import \
+cubes from the Cube Explorer program.",
+  FontSize->16]
+}], "Text",
+ CellChangeTimes->{{3.496780266088698*^9, 3.496780356484868*^9}, {
+   3.4967803875326443`*^9, 3.4967804360524197`*^9}, {3.49678050984164*^9, 
+   3.4967806436712947`*^9}, {3.496780683196555*^9, 3.496780953195998*^9}, {
+   3.496781042128085*^9, 3.496781047063367*^9}, {3.4967810850585403`*^9, 
+   3.4967810959391627`*^9}, {3.49772119532885*^9, 3.49772120005612*^9}, 
+   3.497721305791668*^9, {3.497721344578886*^9, 3.497721445499857*^9}, {
+   3.49772160505378*^9, 3.4977216188755703`*^9}, {3.497889414397587*^9, 
+   3.4978896009552565`*^9}, {3.497890525397627*^9, 3.4978905304409156`*^9}, {
+   3.4979605170147657`*^9, 3.4979605176158004`*^9}, {3.4979605613994036`*^9, 
+   3.4979605671257315`*^9}, {3.497965828072716*^9, 3.497965833696038*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Loading the Package", "Section",
+ CellChangeTimes->{{3.4967811218776464`*^9, 3.496781126959937*^9}},
+ Background->RGBColor[0.87, 0.94, 1]],
+
+Cell[TextData[StyleBox["When loading the package, some files are created in \
+the notebook directory. This may take about 10 minutes. The next time the \
+package is loaded these files are read from disk, which takes only a few \
+seconds. All generated files are pure text files and can be read with an \
+arbitrary text editor.",
+ FontSize->16]], "Text",
+ CellChangeTimes->{{3.496781209129637*^9, 3.496781234050062*^9}, {
+  3.49678127177322*^9, 3.4967812827078457`*^9}, {3.496781314294652*^9, 
+  3.496781462329119*^9}, {3.4967822934996595`*^9, 3.496782299665012*^9}, {
+  3.4967823496758723`*^9, 3.4967824192418513`*^9}, {3.4979632156154346`*^9, 
+  3.4979632463456926`*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{
+   RowBox[{"SetDirectory", "[", 
+    RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";", 
+   RowBox[{"<<", "TwoPhase`"}]}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["The Functions in a Nutshell", "Section",
+ CellChangeTimes->{{3.497801631346681*^9, 3.4978016343228517`*^9}, {
+  3.4978018258602033`*^9, 3.4978018333926344`*^9}, {3.49780187215145*^9, 
+  3.4978018755116425`*^9}, {3.4978019409433846`*^9, 3.4978019453976393`*^9}},
+ Background->RGBColor[0.87, 0.94, 1]],
+
+Cell[TextData[StyleBox["U1, U2, U3, R1, R2, R3, F1, F2, F3, D1, D2, D3, L1, \
+L2, L3, B1, B2, B3:  The permutation representations of the basic moves.\n\
+Example:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.497801986562994*^9, 3.497801986795007*^9}, {
+  3.497802036880471*^9, 3.4978023816177883`*^9}, {3.497802416070759*^9, 
+  3.4978024912840605`*^9}, {3.4978025296208525`*^9, 3.4978025785188475`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["R3",
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4978025855802517`*^9, 3.497802586697315*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "2", ",", "3", ",", "8", ",", "1", ",", "6", ",", "7", ",", 
+       "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "2", ",", "0", ",", "0", ",", "1", ",", "1", ",", "0", ",", "0", ",", 
+       "2"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "12", ",", "2", ",", "3", ",", "4", ",", "9", ",", "6", ",", "7", ",", 
+       "8", ",", "1", ",", "10", ",", "11", ",", "5"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.4979595872031994`*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["CircleDot[c1,c2] or \nc1\[CircleDot]c2: Multiplication of two cube \
+permutations c1 and c2. The CircleDot operator may by entered as ",
+  FontSize->16],
+ StyleBox["Esc c. Esc",
+  FontSize->16,
+  FontWeight->"Bold"],
+ StyleBox[".",
+  FontSize->16],
+ StyleBox["\n",
+  FontSize->16,
+  FontWeight->"Bold"],
+ StyleBox["Examples:",
+  FontSize->16]
+}], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{
+  3.497802539974445*^9, {3.4978026200372224`*^9, 3.4978026505819693`*^9}, {
+   3.49780278086102*^9, 3.4978027922226696`*^9}, {3.497802964734934*^9, 
+   3.497802968978176*^9}, 3.4978060150156384`*^9, 3.4979564826623087`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"U1", "\[CircleDot]", "B3", "\[CircleDot]", "F2"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497802663424704*^9, 3.497802699612774*^9}, {
+  3.497806023201106*^9, 3.4978060522372665`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "6", ",", "5", ",", "7", ",", "2", ",", "1", ",", "4", ",", "8", ",", 
+       "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "1", ",", "2", ",", "0", ",", "0", ",", "2", ",", 
+       "1"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "6", ",", "2", ",", "11", ",", "5", ",", "1", ",", "7", ",", 
+       "12", ",", "10", ",", "9", ",", "8", ",", "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "0", ",", "0", ",", 
+       "1", ",", "0", ",", "0", ",", "1", ",", "1"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.4979595978698096`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"U1", "\[CircleDot]", "B3"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4978060580756006`*^9, 3.497806063918935*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "1", ",", "7", ",", "2", ",", "5", ",", "6", ",", "8", ",", 
+       "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "1", ",", "2", ",", "0", ",", "0", ",", "2", ",", 
+       "1"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "1", ",", "2", ",", "11", ",", "5", ",", "6", ",", "7", ",", 
+       "12", ",", "9", ",", "10", ",", "8", ",", "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "0", ",", "0", ",", 
+       "1", ",", "0", ",", "0", ",", "1", ",", "1"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.497959601642026*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"CircleDot", "[", 
+   RowBox[{"U1", ",", "B3", ",", "F2"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497806066930107*^9, 3.4978060883713336`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "6", ",", "5", ",", "7", ",", "2", ",", "1", ",", "4", ",", "8", ",", 
+       "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "1", ",", "2", ",", "0", ",", "0", ",", "2", ",", 
+       "1"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "6", ",", "2", ",", "11", ",", "5", ",", "1", ",", "7", ",", 
+       "12", ",", "10", ",", "9", ",", "8", ",", "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", "0", ",", "0", ",", 
+       "1", ",", "0", ",", "0", ",", "1", ",", "1"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.4979596046982*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["showCube[c]: Gives a 3D-display of a cube c. The \
+color scheme may be edited with the editor (see below).\nExamples:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{
+  3.4978028164272523`*^9, {3.497802884970772*^9, 3.4978029017777333`*^9}, {
+   3.4978029491520424`*^9, 3.4978029571585*^9}, {3.4978051656878624`*^9, 
+   3.497805173194292*^9}, {3.4978052078654733`*^9, 3.4978052117326946`*^9}, {
+   3.4978052427984715`*^9, 3.4978052655327716`*^9}, {3.4978053254721994`*^9, 
+   3.4978053351717544`*^9}, 3.497805917096037*^9, {3.497956077196122*^9, 
+   3.49795614133679*^9}, 3.4979564585999327`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"showCube", "[", "F2", "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4978053609487286`*^9, 3.497805384727089*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[{{{
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+  BaseStyle->{
+    EdgeForm[{
+      GrayLevel[0.5], 
+      Thickness[0.02]}]},
+  Boxed->False,
+  ImageSize->150,
+  Lighting->"Neutral",
+  SphericalRegion->True,
+  ViewPoint->{10, 10, 10},
+  ViewVertical->{0, 0, 1}]], "Output",
+ CellChangeTimes->{3.497959616217859*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"showCube", " ", "/@", " ", 
+   RowBox[{"{", 
+    RowBox[{"U1", ",", " ", "R1", ",", " ", 
+     RowBox[{"F1", "\[CircleDot]", "R3"}]}], "}"}]}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4978059234223995`*^9, 3.497805964330739*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}]}], "}"}]], "Output",
+ CellChangeTimes->{3.4979596270924807`*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["randomCube: Generates a random Cube.\nExample:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.497806162383567*^9, 3.4978061813006487`*^9}, {
+   3.497806226377227*^9, 3.4978062495965548`*^9}, 3.4979564735467873`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["randomCube",
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497806253266265*^9, 3.497806257160487*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "8", ",", "6", ",", "3", ",", "2", ",", "4", ",", "5", ",", 
+       "7"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "0", ",", "0", ",", "2", ",", "0", ",", "0", ",", 
+       "1"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "9", ",", "7", ",", "1", ",", "8", ",", "6", ",", "5", ",", "12", ",", 
+       "4", ",", "3", ",", "2", ",", "11", ",", "10"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", 
+       "1", ",", "0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.4979596373360667`*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["editor: Invokes the editor to edit the edit the \
+facelet colors of a cube. The color of the center facelets also affect the \
+showCube function.\nExample:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.497955977456417*^9, 3.4979559776284275`*^9}, {
+   3.49795602419109*^9, 3.497956071115774*^9}, {3.49795646992458*^9, 
+   3.497956470644621*^9}, {3.497956503422496*^9, 3.4979565481700554`*^9}, {
+   3.49795674689942*^9, 3.4979567473384447`*^9}, {3.4979606596530237`*^9, 
+   3.4979606748638935`*^9}, 3.4979607929712467`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["editor",
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4979565524513006`*^9, 3.4979565532063437`*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  DynamicBox[ToBoxes[TwoPhase`Private`setcolors, StandardForm],
+   ImageSizeCache->{182., {0., 8.}}],
+  EventHandlerTag[{
+   "MouseClicked" :> ((TwoPhase`Private`pt$1302 = Floor[#]; 
+     Switch[TwoPhase`Private`pt$1302, {7, 1}, TwoPhase`Private`curCol = 
+       Yellow, {8, 1}, TwoPhase`Private`curCol = Blue, {9, 1}, 
+       TwoPhase`Private`curCol = Red, {7, 0}, TwoPhase`Private`curCol = 
+       White, {8, 0}, TwoPhase`Private`curCol = Green, {9, 0}, 
+       TwoPhase`Private`curCol = Orange]; If[
+       And[
+       Part[TwoPhase`Private`pt$1302, 2] > 2, 
+        Part[TwoPhase`Private`pt$1302, 2] < 6], 
+       If[
+       Part[TwoPhase`Private`pt$1302, 1] < 3, 
+        Part[TwoPhase`Private`c, 5, Part[TwoPhase`Private`pt$1302, 1] + 1, 
+          Part[TwoPhase`Private`pt$1302, 2] - 2] = TwoPhase`Private`curCol, 
+        If[
+        Part[TwoPhase`Private`pt$1302, 1] < 6, 
+         Part[TwoPhase`Private`c, 3, Part[TwoPhase`Private`pt$1302, 1] - 2, 
+           Part[TwoPhase`Private`pt$1302, 2] - 2] = TwoPhase`Private`curCol, 
+         If[
+         Part[TwoPhase`Private`pt$1302, 1] < 9, 
+          Part[TwoPhase`Private`c, 2, Part[TwoPhase`Private`pt$1302, 1] - 5, 
+            Part[TwoPhase`Private`pt$1302, 2] - 2] = TwoPhase`Private`curCol, 
+          If[
+          Part[TwoPhase`Private`pt$1302, 1] < 12, 
+           Part[TwoPhase`Private`c, 6, Part[TwoPhase`Private`pt$1302, 1] - 8, 
+             Part[TwoPhase`Private`pt$1302, 2] - 2] = 
+           TwoPhase`Private`curCol]]]], 
+       If[
+        And[
+        Part[TwoPhase`Private`pt$1302, 1] > 2, 
+         Part[TwoPhase`Private`pt$1302, 1] < 6], 
+        If[
+        Part[TwoPhase`Private`pt$1302, 2] < 3, 
+         Part[TwoPhase`Private`c, 4, Part[TwoPhase`Private`pt$1302, 1] - 2, 
+           Part[TwoPhase`Private`pt$1302, 2] + 1] = TwoPhase`Private`curCol, 
+         If[
+         Part[TwoPhase`Private`pt$1302, 2] > 5, 
+          Part[TwoPhase`Private`c, 1, Part[TwoPhase`Private`pt$1302, 1] - 2, 
+            Part[TwoPhase`Private`pt$1302, 2] - 5] = 
+          TwoPhase`Private`curCol]]]]; Null)& )[
+      MousePosition["EventHandlerAutomatic"]], PassEventsDown -> Automatic, 
+    PassEventsUp -> True}]]], "Output",
+ CellChangeTimes->{3.497959662784522*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["editorToCube: Generates a cube in the permutation \
+representation from the facelet color in the editor.\nExample:",
+ FontSize->16]], "Text",
+ CellChangeTimes->{{3.497956573484003*^9, 3.4979565736550126`*^9}, {
+  3.4979566078574667`*^9, 3.4979566206772003`*^9}, {3.4979566553566837`*^9, 
+  3.4979567656024895`*^9}, {3.4979567972843013`*^9, 3.4979568867539186`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["editorToCube",
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4979568927172594`*^9, 3.497956895650427*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7", ",", 
+       "8"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "2", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7", ",", 
+       "8", ",", "9", ",", "10", ",", "11", ",", "12"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.497959762448722*^9}]
+}, Open  ]],
+
+Cell[TextData[{
+ StyleBox["import[filename]",
+  FontSize->16,
+  FontColor->RGBColor[0.5, 0, 0.5]],
+ StyleBox[": Import a Cube Explorer maneuver file",
+  FontSize->16]
+}], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.4978893652177734`*^9, 3.4978893660078187`*^9}, {
+  3.4978896581500273`*^9, 3.4978896961597013`*^9}}],
+
+Cell[TextData[StyleBox["solveCube[c]: Solve the cube with the \
+Two-Phase-Algorithm and return with the first solution found. This may take \
+several seconds!\nsolveCube[c,min]: Solve the cube with the \
+Two-Phase-Algorithm and do not return until a solution with <= max moves is \
+found.\nExample:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.497889740092214*^9, 3.4978897504998093`*^9}, {
+   3.4978898788776503`*^9, 3.4978898846479797`*^9}, {3.497889980960989*^9, 
+   3.4978900573813596`*^9}, {3.497890108657792*^9, 3.4978902343564816`*^9}, {
+   3.497890286169445*^9, 3.4978902898486557`*^9}, 3.497959868076763*^9, {
+   3.4979599430210495`*^9, 3.4979599825539103`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"solveCube", "[", "randomCube", "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497890306027581*^9, 3.497890326391746*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "6", ",", "4", ",", "3", ",", "5", ",", "2", ",", "7", ",", "1", ",", 
+       "8"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "2", ",", "1", ",", "2", ",", "2", ",", "0", ",", "1", ",", 
+       "1"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "11", ",", "4", ",", "3", ",", "12", ",", "7", ",", "5", ",", "2", ",", 
+       "6", ",", "9", ",", "10", ",", "8", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "1", ",", "0", ",", "0", ",", "0", ",", 
+       "1", ",", "0", ",", "0", ",", "0", ",", "1"}], "}"}]}], "}"}]}], 
+  "}"}]], "Print",
+ CellChangeTimes->{3.497959790832345*^9, 3.4979598318096886`*^9}],
+
+Cell[BoxData["\<\"B2 L2 D3 R2 L2 B3 U3 R1 B1 . R2 U1 R2 U1 R2 D2 F2 D3 B2 R2 \
+U2 R2 U3 F2 D3 (24f)\"\>"], "Print",
+ CellChangeTimes->{3.497959790832345*^9, 3.497959854527988*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"solveCube", "[", 
+   RowBox[{"randomCube", ",", "22"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497890332687106*^9, 3.4978903393164854`*^9}, {
+  3.4978903811513777`*^9, 3.497890387257227*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "4", ",", "5", ",", "8", ",", "2", ",", "6", ",", "7", ",", "1", ",", 
+       "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "2", ",", "2", ",", "0", ",", "2", ",", "1", ",", "2", ",", "1", ",", 
+       "2"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "2", ",", "9", ",", "7", ",", "10", ",", "1", ",", "11", ",", "4", ",", 
+       "6", ",", "8", ",", "5", ",", "3", ",", "12"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", 
+       "1", ",", "0", ",", "0", ",", "1", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Print",
+ CellChangeTimes->{3.497959872832035*^9}],
+
+Cell[BoxData["\<\"R2 B1 L1 U3 R3 D2 L3 U2 B1 . D3 R2 D1 B2 D3 R2 L2 B2 D1 F2 \
+U1 F2 U3 F2 (23f)\"\>"], "Print",
+ CellChangeTimes->{3.4979598859617863`*^9}],
+
+Cell[BoxData["\<\"U1 R1 B1 R1 F3 D3 B2 L1 U2 B1 . U2 F2 B2 R2 D3 F2 R2 D1 L2 \
+B2 U3 D3 (22f)\"\>"], "Print",
+ CellChangeTimes->{3.4979598867938337`*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Some further examples for working with the Package", "Section",
+ CellChangeTimes->{{3.4967822309090796`*^9, 3.4967822326061764`*^9}, {
+  3.4967824579090633`*^9, 3.4967824706917944`*^9}, {3.497960430670233*^9, 
+  3.497960440641803*^9}},
+ Background->RGBColor[0.87, 0.94, 1]],
+
+Cell[TextData[{
+ StyleBox["There are different ways to define a cube configuration. Since ",
+  FontSize->16],
+ StyleBox["Mathematica",
+  FontSize->16,
+  FontSlant->"Italic"],
+ StyleBox[" works with list, a cube is represented by a list too. One \
+possibility is to give a list of the 6*9 facelet colors. Though this is an \
+obvious way, it is not the best way. We do not move facelets, we move and \
+flip edges and we move and twist corners. ",
+  FontSize->16],
+ StyleBox["So if we talk of a cube in the package, we mean its representation \
+by permutations of corners and edges",
+  FontSize->16,
+  FontColor->RGBColor[1, 0, 0]],
+ StyleBox[". Here is the representation of the well known \"cube in the \
+cube\":",
+  FontSize->16]
+}], "Text",
+ CellChangeTimes->{{3.4967839568507977`*^9, 3.4967840230515842`*^9}, {
+  3.4967840814879265`*^9, 3.4967840937246265`*^9}, {3.496784260148145*^9, 
+  3.4967842785071955`*^9}, {3.4967843100650005`*^9, 3.4967843265329423`*^9}, {
+  3.4967843568416758`*^9, 3.4967844586484985`*^9}, {3.4967849387529593`*^9, 
+  3.496784940549062*^9}, {3.4977215763001356`*^9, 3.4977215860236917`*^9}, {
+  3.4977216599999228`*^9, 3.4977219480049906`*^9}, {3.497723297182314*^9, 
+  3.497723352094455*^9}, {3.4977233832402363`*^9, 3.497723421485424*^9}, {
+  3.497723452699209*^9, 3.4977234633178167`*^9}, {3.4977235028715787`*^9, 
+  3.497723635888687*^9}, {3.4977237054326644`*^9, 3.4977237465520163`*^9}, {
+  3.497960853536711*^9, 3.497960872854816*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox["cubeInTheCube",
+   FontColor->RGBColor[0.5, 0, 0.5]], "=", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "1", ",", "4", ",", "8", ",", "5", ",", "2", ",", "3", ",", "7", ",", 
+        "6"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+       "0", ",", "1", ",", "2", ",", "1", ",", "1", ",", "2", ",", "0", ",", 
+        "2"}], "}"}]}], "}"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "1", ",", "2", ",", "12", ",", "5", ",", "10", ",", "3", ",", "7", ",",
+         "8", ",", "9", ",", "4", ",", "11", ",", "6"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{
+       "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", 
+        "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.4977230395653896`*^9, 3.4977230452347136`*^9}, {
+  3.497724529453692*^9, 3.497724529785711*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "4", ",", "8", ",", "5", ",", "2", ",", "3", ",", "7", ",", 
+       "6"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "1", ",", "2", ",", "1", ",", "1", ",", "2", ",", "0", ",", 
+       "2"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "12", ",", "5", ",", "10", ",", "3", ",", "7", ",", 
+       "8", ",", "9", ",", "4", ",", "11", ",", "6"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.4979601758604603`*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["The corners are represented by the numbers 1 to 8 and \
+the edges by 1 to 12. The reference frame for the orientations of the edges \
+and corners is the Up and Down face, for the edges without any Up or Down \
+facelet it is the Front and Back face. The following 3D graphics shows the \
+mapping between the cubies and the numbers of a solved cube.",
+ FontSize->14]], "Text",
+ CellChangeTimes->{{3.4967846776750264`*^9, 3.4967846781160517`*^9}, {
+   3.4967847119809885`*^9, 3.4967847132000585`*^9}, 3.4967849088842506`*^9, {
+   3.4967849573240213`*^9, 3.4967849609382277`*^9}, {3.4967850075738955`*^9, 
+   3.49678505958687*^9}, {3.496785092410748*^9, 3.496785092993781*^9}, {
+   3.4977239584776373`*^9, 3.497724171407817*^9}, {3.497724206397818*^9, 
+   3.497724273777672*^9}, {3.497724316443612*^9, 3.497724367284119*^9}, {
+   3.4977269688704543`*^9, 3.4977269886047816`*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[{Text3DBox[
+    FormBox[
+     StyleBox["1",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {1.5, 3, 3}], Text3DBox[
+    FormBox[
+     StyleBox["2",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {3, 1.5, 3}], Text3DBox[
+    FormBox[
+     StyleBox["3",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {1.5, 0, 3}], Text3DBox[
+    FormBox[
+     StyleBox["4",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {0, 1.5, 3}], Text3DBox[
+    FormBox[
+     StyleBox["5",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {1.5, 3, 0}], Text3DBox[
+    FormBox[
+     StyleBox["6",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {3, 1.5, 0}], Text3DBox[
+    FormBox[
+     StyleBox["7",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {1.5, 0, 0}], Text3DBox[
+    FormBox[
+     StyleBox["8",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {0, 1.5, 0}], Text3DBox[
+    FormBox[
+     StyleBox["9",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {3, 3, 1.5}], Text3DBox[
+    FormBox[
+     StyleBox["10",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {3, 0, 1.5}], Text3DBox[
+    FormBox[
+     StyleBox["11",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {0, 0, 1.5}], Text3DBox[
+    FormBox[
+     StyleBox["12",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[0, 0, 1],
+      BackFaceColor->RGBColor[0, 0, 1],
+      GraphicsColor->RGBColor[0, 0, 1],
+      FontSize->Large,
+      FontColor->RGBColor[0, 0, 1]], TraditionalForm], {0, 3, 1.5}], Text3DBox[
+    FormBox[
+     StyleBox["1",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {3, 3, 3}], Text3DBox[
+    FormBox[
+     StyleBox["2",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {3, 0, 3}], Text3DBox[
+    FormBox[
+     StyleBox["3",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {0, 0, 3}], Text3DBox[
+    FormBox[
+     StyleBox["4",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {0, 3, 3}], Text3DBox[
+    FormBox[
+     StyleBox["5",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {3, 3, 0}], Text3DBox[
+    FormBox[
+     StyleBox["6",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {3, 0, 0}], Text3DBox[
+    FormBox[
+     StyleBox["7",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {0, 0, 0}], Text3DBox[
+    FormBox[
+     StyleBox["8",
+      StripOnInput->False,
+      FrontFaceColor->RGBColor[1, 0, 0],
+      BackFaceColor->RGBColor[1, 0, 0],
+      GraphicsColor->RGBColor[1, 0, 0],
+      FontSize->Large,
+      FontColor->RGBColor[1, 0, 0]], TraditionalForm], {0, 3, 0}]},
+  ImageSize->{250, 250},
+  SphericalRegion->True,
+  ViewPoint->{8, 10, 3},
+  ViewVertical->{0, 0, 1}]], "Output",
+ CellChangeTimes->{{3.4967503792942715`*^9, 3.4967503910169415`*^9}, 
+   3.4967504367345567`*^9, 3.4967505469738617`*^9, 3.4967506150817575`*^9, {
+   3.496757129952387*^9, 3.4967571574559603`*^9}, 3.4967573059764547`*^9, {
+   3.4967657392668114`*^9, 3.4967657473722754`*^9}, {3.49676579834319*^9, 
+   3.496765836951399*^9}, 3.496765870852338*^9, 3.4967659079554596`*^9, {
+   3.496766283941965*^9, 3.4967663151737514`*^9}, 3.4967664882256494`*^9, 
+   3.496766621843292*^9, {3.496766655506217*^9, 3.496766691373269*^9}, {
+   3.496766780423362*^9, 3.4967668142642975`*^9}, {3.4967668492913013`*^9, 
+   3.4967668840202875`*^9}, 3.496766928190814*^9, 3.4967670275534973`*^9, 
+   3.4967670599883523`*^9, 3.4967671792311726`*^9, 3.4967673510870023`*^9, 
+   3.4967673983087034`*^9, 3.496767456245017*^9, {3.496767488067837*^9, 
+   3.4967675064328876`*^9}, 3.4967675465041795`*^9, 3.4967675952499676`*^9, 
+   3.4969283119645433`*^9, 3.4969285034554963`*^9, 3.496928559010674*^9, {
+   3.4969285927526035`*^9, 3.4969286566542587`*^9}, {3.4969287146025734`*^9, 
+   3.4969287411840935`*^9}, {3.4969288339774013`*^9, 3.4969288982870793`*^9}}],
+
+Cell[TextData[StyleBox["Let us display the cube in the cube:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.497724427853881*^9, 3.4977244625708666`*^9}, {
+  3.497960902683522*^9, 3.4979609044576235`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"showCube", "[", "cubeInTheCube", "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4977244683771987`*^9, 3.4977244847121325`*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[{{{
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+  BaseStyle->{
+    EdgeForm[{
+      GrayLevel[0.5], 
+      Thickness[0.02]}]},
+  Boxed->False,
+  ImageSize->150,
+  Lighting->"Neutral",
+  SphericalRegion->True,
+  ViewPoint->{10, 10, 10},
+  ViewVertical->{0, 0, 1}]], "Output",
+ CellChangeTimes->{{3.497960167556985*^9, 3.497960179373661*^9}}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["Now we solve the cube with the Two-Phase-Algorithm. \
+We want a solution not longer than 20 moves.",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.4977246359071383`*^9, 3.4977246538025584`*^9}, {
+   3.4977248795806665`*^9, 3.497724943734534*^9}, {3.497725180058615*^9, 
+   3.497725181665707*^9}, {3.497727001550522*^9, 3.497727001750533*^9}, 
+   3.497957252072012*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"solveCube", "[", 
+   RowBox[{"cubeInTheCube", ",", "20"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.49772494769676*^9, 3.4977249511807575`*^9}, {
+  3.497724983928027*^9, 3.4977250014350233`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "4", ",", "8", ",", "5", ",", "2", ",", "3", ",", "7", ",", 
+       "6"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "1", ",", "2", ",", "1", ",", "1", ",", "2", ",", "0", ",", 
+       "2"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "12", ",", "5", ",", "10", ",", "3", ",", "7", ",", 
+       "8", ",", "9", ",", "4", ",", "11", ",", "6"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "1", ",", "1", ",", "1", ",", "1", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Print",
+ CellChangeTimes->{3.4979602120885324`*^9}],
+
+Cell[BoxData["\<\"U1 R1 B3 R3 D2 F2 D3 R3 B1 . R2 U1 F2 L2 D3 L2 F2 D3 F2 U1 \
+B2 U1 B2 (22f)\"\>"], "Print",
+ CellChangeTimes->{3.4979602126345634`*^9}],
+
+Cell[BoxData["\<\"U1 L2 D1 R1 B3 R1 B3 R1 B1 . U2 D2 F2 D3 R2 U1 L2 B2 D2 \
+(18f)\"\>"], "Print",
+ CellChangeTimes->{3.4979602131645937`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[TextData[StyleBox["If we want a solution with a maximum of 15 moves:",
+ FontSize->16]], "Text",
+ CellChangeTimes->{{3.4977255301640325`*^9, 3.497725556762545*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"solveCube", "[", 
+   RowBox[{"cubeInTheCube", ",", "15"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497725583674283*^9, 3.4977255840563045`*^9}}],
+
+Cell[TextData[StyleBox["U1, R1, B1, F1, D1, L1 and B1 are 90\[Degree] \
+clockwise turns of the Up, Right, Front, Down and Back face.\nThe face turns \
+U1, U2, U3 etc. are also implemented as permutations. For example",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.497725703146491*^9, 3.4977258696629763`*^9}, {
+  3.4977259302060337`*^9, 3.497726112523048*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["B2",
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4977260994152985`*^9, 3.4977261009043837`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "8", ",", "7", ",", "5", ",", "6", ",", "4", ",", 
+       "3"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "8", ",", "5", ",", "6", ",", "7", ",", 
+       "4", ",", "9", ",", "10", ",", "12", ",", "11"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.4977261025594783`*^9, 3.4979602642095137`*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["Here is the 3D graphics of all moves:",
+ FontSize->16]], "Text",
+ CellChangeTimes->{{3.4977261686478443`*^9, 3.497726214744873*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"showCube", " ", "/@", " ", 
+   RowBox[{"{", 
+    RowBox[{
+    "U1", ",", "R1", ",", "F1", ",", "D1", ",", "L1", ",", "B1", ",", "U2", 
+     ",", "R2", ",", "F2", ",", "D2", ",", "L2", ",", "B2", ",", "U3", ",", 
+     "R3", ",", "F3", ",", "D3", ",", "L3", ",", "B3"}], "}"}]}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4977262534456863`*^9, 3.497726345143918*^9}, {
+  3.4977264233617754`*^9, 3.497726423914807*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}], ",", 
+   Graphics3DBox[{{{
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+       {RGBColor[1, 1, 0], 
+        Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+       {RGBColor[1, 0, 0], 
+        Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+       {GrayLevel[1], 
+        Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+       {RGBColor[0, 1, 0], 
+        Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+       {GrayLevel[1], 
+        Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+       {RGBColor[0, 0, 1], 
+        Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+       {RGBColor[1, 0.5, 0], 
+        Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+    BaseStyle->{
+      EdgeForm[{
+        GrayLevel[0.5], 
+        Thickness[0.02]}]},
+    Boxed->False,
+    ImageSize->150,
+    Lighting->"Neutral",
+    SphericalRegion->True,
+    ViewPoint->{10, 10, 10},
+    ViewVertical->{0, 0, 1}]}], "}"}]], "Output",
+ CellChangeTimes->{3.4979602753641515`*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["You can use the CircleDot operator \[CircleDot], \
+entered as Esc c. Esc to multiply cubes/permutations:",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.4977265345069036`*^9, 3.497726618444291*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"U1", "\[CircleDot]", "R2", "\[CircleDot]", "F3"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4977266682537346`*^9, 3.497726702353077*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "3", ",", "8", ",", "2", ",", "5", ",", "6", ",", "1", ",", "7", ",", 
+       "4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "0", ",", "0", ",", "2", ",", "1", ",", "0", ",", 
+       "0"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "5", ",", "12", ",", "2", ",", "3", ",", "4", ",", "10", ",", "7", ",", 
+       "8", ",", "6", ",", "1", ",", "11", ",", "9"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "1", ",", "0", ",", "0", ",", "0", ",", "1", ",", "0", ",", 
+       "0", ",", "1", ",", "1", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{3.497960282614566*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"showCube", "[", 
+   RowBox[{"U1", "\[CircleDot]", "R2"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4977267193918447`*^9, 3.4977267503250103`*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[{{{
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{0, 0, 3}, {1, 0, 3}, {1, 1, 3}, {0, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{0, 1, 3}, {1, 1, 3}, {1, 2, 3}, {0, 2, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 2, 3}, {1, 2, 3}, {1, 3, 3}, {0, 3, 3}}]}}, {
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 0, 3}, {2, 0, 3}, {2, 1, 3}, {1, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 1, 3}, {2, 1, 3}, {2, 2, 3}, {1, 2, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 2, 3}, {2, 2, 3}, {2, 3, 3}, {1, 3, 3}}]}}, {
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 0, 3}, {3, 0, 3}, {3, 1, 3}, {2, 1, 3}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 1, 3}, {3, 1, 3}, {3, 2, 3}, {2, 2, 3}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{2, 2, 3}, {3, 2, 3}, {3, 3, 3}, {2, 3, 3}}]}}}, {{
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 3, 2}, {3, 3, 2}, {3, 3, 3}, {2, 3, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 2}, {2, 3, 2}, {2, 3, 3}, {1, 3, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 3, 2}, {1, 3, 2}, {1, 3, 3}, {0, 3, 3}}]}}, {
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{2, 3, 1}, {3, 3, 1}, {3, 3, 2}, {2, 3, 2}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{1, 3, 1}, {2, 3, 1}, {2, 3, 2}, {1, 3, 2}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 3, 1}, {1, 3, 1}, {1, 3, 2}, {0, 3, 2}}]}}, {
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{2, 3, 0}, {3, 3, 0}, {3, 3, 1}, {2, 3, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{1, 3, 0}, {2, 3, 0}, {2, 3, 1}, {1, 3, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 3, 0}, {1, 3, 0}, {1, 3, 1}, {0, 3, 1}}]}}}, {{
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{3, 0, 2}, {3, 1, 2}, {3, 1, 3}, {3, 0, 3}}]}, 
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{3, 1, 2}, {3, 2, 2}, {3, 2, 3}, {3, 1, 3}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{3, 2, 2}, {3, 3, 2}, {3, 3, 3}, {3, 2, 3}}]}}, {
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 0, 1}, {3, 1, 1}, {3, 1, 2}, {3, 0, 2}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 1}, {3, 2, 1}, {3, 2, 2}, {3, 1, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{3, 2, 1}, {3, 3, 1}, {3, 3, 2}, {3, 2, 2}}]}}, {
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 0, 0}, {3, 1, 0}, {3, 1, 1}, {3, 0, 1}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{3, 1, 0}, {3, 2, 0}, {3, 2, 1}, {3, 1, 1}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{3, 2, 0}, {3, 3, 0}, {3, 3, 1}, {3, 2, 1}}]}}}, {{
+     {GrayLevel[1], 
+      Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 1, 0}, {2, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{2, 1, 0}, {3, 1, 0}, {3, 2, 0}, {2, 2, 0}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{2, 2, 0}, {3, 2, 0}, {3, 3, 0}, {2, 3, 0}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 1, 0}, {1, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{1, 1, 0}, {2, 1, 0}, {2, 2, 0}, {1, 2, 0}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{1, 2, 0}, {2, 2, 0}, {2, 3, 0}, {1, 3, 0}}]}}, {
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 1, 0}, {0, 1, 0}}]}, 
+     {GrayLevel[1], 
+      Polygon3DBox[{{0, 1, 0}, {1, 1, 0}, {1, 2, 0}, {0, 2, 0}}]}, 
+     {RGBColor[1, 1, 0], 
+      Polygon3DBox[{{0, 2, 0}, {1, 2, 0}, {1, 3, 0}, {0, 3, 0}}]}}}, {{
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{0, 0, 2}, {1, 0, 2}, {1, 0, 3}, {0, 0, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{1, 0, 2}, {2, 0, 2}, {2, 0, 3}, {1, 0, 3}}]}, 
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{2, 0, 2}, {3, 0, 2}, {3, 0, 3}, {2, 0, 3}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 1}, {1, 0, 1}, {1, 0, 2}, {0, 0, 2}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 1}, {2, 0, 1}, {2, 0, 2}, {1, 0, 2}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 0, 1}, {3, 0, 1}, {3, 0, 2}, {2, 0, 2}}]}}, {
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 0}, {1, 0, 0}, {1, 0, 1}, {0, 0, 1}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{1, 0, 0}, {2, 0, 0}, {2, 0, 1}, {1, 0, 1}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{2, 0, 0}, {3, 0, 0}, {3, 0, 1}, {2, 0, 1}}]}}}, {{
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{0, 2, 2}, {0, 3, 2}, {0, 3, 3}, {0, 2, 3}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 1, 2}, {0, 2, 2}, {0, 2, 3}, {0, 1, 3}}]}, 
+     {RGBColor[0, 0, 1], 
+      Polygon3DBox[{{0, 0, 2}, {0, 1, 2}, {0, 1, 3}, {0, 0, 3}}]}}, {
+     {RGBColor[1, 0, 0], 
+      Polygon3DBox[{{0, 2, 1}, {0, 3, 1}, {0, 3, 2}, {0, 2, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 1}, {0, 2, 1}, {0, 2, 2}, {0, 1, 2}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 1}, {0, 1, 1}, {0, 1, 2}, {0, 0, 2}}]}}, {
+     {RGBColor[0, 1, 0], 
+      Polygon3DBox[{{0, 2, 0}, {0, 3, 0}, {0, 3, 1}, {0, 2, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 1, 0}, {0, 2, 0}, {0, 2, 1}, {0, 1, 1}}]}, 
+     {RGBColor[1, 0.5, 0], 
+      Polygon3DBox[{{0, 0, 0}, {0, 1, 0}, {0, 1, 1}, {0, 0, 1}}]}}}},
+  BaseStyle->{
+    EdgeForm[{
+      GrayLevel[0.5], 
+      Thickness[0.02]}]},
+  Boxed->False,
+  ImageSize->150,
+  Lighting->"Neutral",
+  SphericalRegion->True,
+  ViewPoint->{10, 10, 10},
+  ViewVertical->{0, 0, 1}]], "Output",
+ CellChangeTimes->{3.4979603172511463`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"solveCube", "[", 
+   RowBox[{
+    RowBox[{"U1", "\[CircleDot]", "R2"}], ",", "2"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497726777214941*^9, 3.4977268428722825`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "8", ",", "1", ",", "2", ",", "5", ",", "3", ",", "6", ",", "7", ",", 
+       "4"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "5", ",", "1", ",", "2", ",", "3", ",", "4", ",", "6", ",", "7", ",", 
+       "8", ",", "12", ",", "10", ",", "11", ",", "9"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Print",
+ CellChangeTimes->{3.497960320154312*^9}],
+
+Cell[BoxData["\<\"U1 . R2 U3 D1 B2 U3 B2 D3 (8f)\"\>"], "Print",
+ CellChangeTimes->{3.497960320168313*^9}],
+
+Cell[BoxData["\<\"R2 . U3 (2f)\"\>"], "Print",
+ CellChangeTimes->{3.4979603201913147`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[TextData[StyleBox["If we want to change the default color configuration \
+of the cube, we can call the editor.",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.4977270411111813`*^9, 3.4977270949540496`*^9}, {
+  3.497957483867445*^9, 3.4979575155432568`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox["editor",
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.4977270996149154`*^9, 3.497727100686977*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  DynamicBox[ToBoxes[TwoPhase`Private`setcolors, StandardForm],
+   ImageSizeCache->{182., {0., 8.}}],
+  EventHandlerTag[{
+   "MouseClicked" :> ((TwoPhase`Private`pt$2156473 = Floor[#]; 
+     Switch[TwoPhase`Private`pt$2156473, {7, 1}, TwoPhase`Private`curCol = 
+       Yellow, {8, 1}, TwoPhase`Private`curCol = Blue, {9, 1}, 
+       TwoPhase`Private`curCol = Red, {7, 0}, TwoPhase`Private`curCol = 
+       White, {8, 0}, TwoPhase`Private`curCol = Green, {9, 0}, 
+       TwoPhase`Private`curCol = Orange]; If[
+       And[
+       Part[TwoPhase`Private`pt$2156473, 2] > 2, 
+        Part[TwoPhase`Private`pt$2156473, 2] < 6], 
+       If[
+       Part[TwoPhase`Private`pt$2156473, 1] < 3, 
+        Part[TwoPhase`Private`c, 5, Part[TwoPhase`Private`pt$2156473, 1] + 1, 
+          Part[TwoPhase`Private`pt$2156473, 2] - 2] = TwoPhase`Private`curCol, 
+        If[
+        Part[TwoPhase`Private`pt$2156473, 1] < 6, 
+         Part[TwoPhase`Private`c, 3, Part[TwoPhase`Private`pt$2156473, 1] - 2,
+            Part[TwoPhase`Private`pt$2156473, 2] - 2] = 
+         TwoPhase`Private`curCol, 
+         If[
+         Part[TwoPhase`Private`pt$2156473, 1] < 9, 
+          Part[TwoPhase`Private`c, 2, Part[TwoPhase`Private`pt$2156473, 1] - 
+            5, Part[TwoPhase`Private`pt$2156473, 2] - 2] = 
+          TwoPhase`Private`curCol, 
+          If[
+          Part[TwoPhase`Private`pt$2156473, 1] < 12, 
+           Part[TwoPhase`Private`c, 6, Part[TwoPhase`Private`pt$2156473, 1] - 
+             8, Part[TwoPhase`Private`pt$2156473, 2] - 2] = 
+           TwoPhase`Private`curCol]]]], 
+       If[
+        And[
+        Part[TwoPhase`Private`pt$2156473, 1] > 2, 
+         Part[TwoPhase`Private`pt$2156473, 1] < 6], 
+        If[
+        Part[TwoPhase`Private`pt$2156473, 2] < 3, 
+         Part[TwoPhase`Private`c, 4, Part[TwoPhase`Private`pt$2156473, 1] - 2,
+            Part[TwoPhase`Private`pt$2156473, 2] + 1] = 
+         TwoPhase`Private`curCol, 
+         If[
+         Part[TwoPhase`Private`pt$2156473, 2] > 5, 
+          Part[TwoPhase`Private`c, 1, Part[TwoPhase`Private`pt$2156473, 1] - 
+            2, Part[TwoPhase`Private`pt$2156473, 2] - 5] = 
+          TwoPhase`Private`curCol]]]]; Null)& )[
+      MousePosition["EventHandlerAutomatic"]], PassEventsDown -> Automatic, 
+    PassEventsUp -> True}]]], "Output",
+ CellChangeTimes->{3.4979603389583883`*^9}]
+}, Open  ]],
+
+Cell[TextData[StyleBox["You can select the colors with a left mouse click. If \
+you paint for example the U-centerfacelet with red and the F-centerfacelet \
+with yellow, showCube changes the corresponding colors:",
+ FontSize->16]], "Text",
+ CellChangeTimes->{{3.4977271953715734`*^9, 3.4977273030812244`*^9}, {
+  3.497727335127057*^9, 3.497727401834856*^9}}],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"showCube", "[", 
+   RowBox[{"U1", "\[CircleDot]", "R2"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497727416873716*^9, 3.497727422866558*^9}}],
+
+Cell[TextData[StyleBox["But the main purpose of the editor is to enter the \
+facelet colors of a cube, generate a cube in the permutation representation \
+and solve it.",
+ FontSize->16]], "Text",
+ CellFrame->{{0, 0}, {0, 0.5}},
+ CellChangeTimes->{{3.4979575417473545`*^9, 3.4979575960524607`*^9}, {
+  3.497957824124988*^9, 3.49795789322594*^9}, {3.4979579600857644`*^9, 
+  3.497957970485359*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"solveCube", "[", 
+   RowBox[{"editorToCube", ",", "22"}], "]"}],
+  FontColor->RGBColor[0.5, 0, 0.5]]], "Input",
+ CellChangeTimes->{{3.497957900542359*^9, 3.4979579338222623`*^9}, {
+  3.4979579738875537`*^9, 3.4979579815379915`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7", ",", 
+       "8"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "2", ",", "1", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+      "1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6", ",", "7", ",", 
+       "8", ",", "9", ",", "10", ",", "11", ",", "12"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+      "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", "0", ",", 
+       "0", ",", "0", ",", "0", ",", "0", ",", "0"}], "}"}]}], "}"}]}], 
+  "}"}]], "Print",
+ CellChangeTimes->{3.4979604052511797`*^9}],
+
+Cell[BoxData["\<\"R2 U1 R1 D3 L2 D1 R1 . U1 D3 F2 U3 R2 D1 R2 D3 L2 D1 R2 U3 \
+B2 R2 (21f)\"\>"], "Print",
+ CellChangeTimes->{3.4979604063162403`*^9}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{992, 880},
+WindowMargins->{{199, Automatic}, {Automatic, 17}},
+FrontEndVersion->"7.0 for Microsoft Windows (64-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 220, 4, 99, "Title"],
+Cell[790, 28, 172, 2, 49, "Subtitle"],
+Cell[CellGroupData[{
+Cell[987, 34, 138, 2, 75, "Section"],
+Cell[1128, 38, 1550, 29, 143, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2715, 72, 144, 2, 75, "Section"],
+Cell[2862, 76, 672, 10, 77, "Text"],
+Cell[3537, 88, 207, 6, 31, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3781, 99, 305, 4, 75, "Section"],
+Cell[4089, 105, 439, 7, 63, "Text"],
+Cell[CellGroupData[{
+Cell[4553, 116, 144, 3, 31, "Input"],
+Cell[4700, 121, 813, 24, 30, "Output"]
+}, Open  ]],
+Cell[5528, 148, 657, 19, 85, "Text"],
+Cell[CellGroupData[{
+Cell[6210, 171, 250, 5, 31, "Input"],
+Cell[6463, 178, 813, 24, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7313, 207, 179, 4, 31, "Input"],
+Cell[7495, 213, 811, 24, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8343, 242, 216, 5, 31, "Input"],
+Cell[8562, 249, 809, 24, 30, "Output"]
+}, Open  ]],
+Cell[9386, 276, 650, 10, 63, "Text"],
+Cell[CellGroupData[{
+Cell[10061, 290, 179, 4, 31, "Input"],
+Cell[10243, 296, 5396, 120, 165, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15676, 421, 294, 7, 31, "Input"],
+Cell[15973, 430, 16819, 360, 167, "Output"]
+}, Open  ]],
+Cell[32807, 793, 273, 4, 63, "Text"],
+Cell[CellGroupData[{
+Cell[33105, 801, 150, 3, 31, "Input"],
+Cell[33258, 806, 813, 24, 30, "Output"]
+}, Open  ]],
+Cell[34086, 833, 581, 9, 63, "Text"],
+Cell[CellGroupData[{
+Cell[34692, 846, 150, 3, 31, "Input"],
+Cell[34845, 851, 2257, 46, 30, "Output"]
+}, Open  ]],
+Cell[37117, 900, 389, 5, 55, "Text"],
+Cell[CellGroupData[{
+Cell[37531, 909, 154, 3, 31, "Input"],
+Cell[37688, 914, 811, 24, 30, "Output"]
+}, Open  ]],
+Cell[38514, 941, 333, 9, 41, "Text"],
+Cell[38850, 952, 707, 11, 85, "Text"],
+Cell[CellGroupData[{
+Cell[39582, 967, 186, 4, 31, "Input"],
+Cell[CellGroupData[{
+Cell[39793, 975, 834, 24, 23, "Print"],
+Cell[40630, 1001, 179, 2, 23, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40858, 1009, 264, 6, 31, "Input"],
+Cell[CellGroupData[{
+Cell[41147, 1019, 810, 24, 23, "Print"],
+Cell[41960, 1045, 156, 2, 23, "Print"],
+Cell[42119, 1049, 153, 2, 23, "Print"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42333, 1058, 279, 4, 75, "Section"],
+Cell[42615, 1064, 1470, 28, 99, "Text"],
+Cell[CellGroupData[{
+Cell[44110, 1096, 994, 28, 52, "Input"],
+Cell[45107, 1126, 813, 24, 30, "Output"]
+}, Open  ]],
+Cell[45935, 1153, 899, 12, 68, "Text"],
+Cell[46837, 1167, 6920, 180, 265, "Output"],
+Cell[53760, 1349, 238, 4, 41, "Text"],
+Cell[CellGroupData[{
+Cell[54023, 1357, 192, 4, 31, "Input"],
+Cell[54218, 1363, 5420, 120, 165, "Output"]
+}, Open  ]],
+Cell[59653, 1486, 425, 7, 41, "Text"],
+Cell[CellGroupData[{
+Cell[60103, 1497, 266, 6, 31, "Input"],
+Cell[CellGroupData[{
+Cell[60394, 1507, 812, 24, 23, "Print"],
+Cell[61209, 1533, 153, 2, 23, "Print"],
+Cell[61365, 1537, 141, 2, 23, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[61533, 1543, 168, 2, 33, "Text"],
+Cell[61704, 1547, 216, 5, 31, "Input"],
+Cell[61923, 1554, 394, 6, 63, "Text"],
+Cell[CellGroupData[{
+Cell[62342, 1564, 146, 3, 31, "Input"],
+Cell[62491, 1569, 837, 24, 30, "Output"]
+}, Open  ]],
+Cell[63343, 1596, 156, 2, 33, "Text"],
+Cell[CellGroupData[{
+Cell[63524, 1602, 479, 10, 31, "Input"],
+Cell[64006, 1614, 100429, 2145, 707, "Output"]
+}, Open  ]],
+Cell[164450, 3762, 255, 4, 41, "Text"],
+Cell[CellGroupData[{
+Cell[164730, 3770, 201, 4, 31, "Input"],
+Cell[164934, 3776, 811, 24, 30, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[165782, 3805, 217, 5, 31, "Input"],
+Cell[166002, 3812, 5398, 120, 165, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[171437, 3937, 241, 6, 31, "Input"],
+Cell[CellGroupData[{
+Cell[171703, 3947, 810, 24, 23, "Print"],
+Cell[172516, 3973, 106, 1, 23, "Print"],
+Cell[172625, 3976, 90, 1, 23, "Print"]
+}, Open  ]]
+}, Open  ]],
+Cell[172742, 3981, 295, 5, 41, "Text"],
+Cell[CellGroupData[{
+Cell[173062, 3990, 148, 3, 31, "Input"],
+Cell[173213, 3995, 2362, 49, 30, "Output"]
+}, Open  ]],
+Cell[175590, 4047, 358, 5, 55, "Text"],
+Cell[175951, 4054, 213, 5, 31, "Input"],
+Cell[176167, 4061, 396, 7, 41, "Text"],
+Cell[CellGroupData[{
+Cell[176588, 4072, 268, 6, 31, "Input"],
+Cell[CellGroupData[{
+Cell[176881, 4082, 812, 24, 23, "Print"],
+Cell[177696, 4108, 150, 2, 23, "Print"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

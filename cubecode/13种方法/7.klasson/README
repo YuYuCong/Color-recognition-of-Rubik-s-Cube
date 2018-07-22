@@ -1,0 +1,8 @@
+Rubik's Cube Solver
+by Mikael Klasson
+mikkl605@student.liu.se
+Linköping, Sweden
+
+Compile with optimization flags. :)
+
+It's a basic implementation of a layer by layer solver for humans.

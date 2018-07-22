@@ -1,0 +1,10 @@
+
+Justin Legakis
+legakis@alum.mit.edu
+
+compilation:
+  g++ cube.cpp -o cube
+
+run instructions:
+  ./cube "DF DR FU BL RB UL UB UR RF DL LF DB DRF FRU LFU BLU BRD LDF LBD BUR"
+
